@@ -102,10 +102,11 @@ while( icont < nlimit )
 
                 % Calculate aspect ratio adjusted slope
                 dx = ( xc( inext ) - xc( iprev ) );
-                dy = ( yc( inext ) - yc( iprev ) ) * ard * arp;
+                dy = sign(dx) * ( yc( inext ) - yc( iprev ) ) / ard * arp;
+                dx = sign(dx) * dx;
 
                 % Calculate angle
-                th = atan( dy / dx ) * 180.0 / pi;
+                th = atan2( dy, dx ) * 180.0 / pi;
             end
 
             hh = text( xint(iint), yint(iint), num2str( level ), 'rotation', th, 'HorizontalAlignment', 'center', 'VerticalAlignment', 'middle'  );
