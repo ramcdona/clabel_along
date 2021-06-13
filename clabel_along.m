@@ -90,29 +90,31 @@ while( icont < nlimit )
         % Loop over all intersections
         nint = length( xint );
         for iint = 1:nint
-            th = 0;
-            if ( rotate )
-                % Calculate text rotation angle based on curve slope and
-                % plot and data aspect ratios.
-                iprev = floor( iout( iint ) );
-                if ( iprev == length(xc) )
-                    iprev = iprev - 1;
+            if ( isfinite(iout(iint)) )
+                th = 0;
+                if ( rotate )
+                    % Calculate text rotation angle based on curve slope and
+                    % plot and data aspect ratios.
+                    iprev = floor( iout( iint ) );
+                    if ( iprev == length(xc) )
+                        iprev = iprev - 1;
+                    end
+                    inext = iprev + 1;
+
+                    % Calculate aspect ratio adjusted slope
+                    dx = ( xc( inext ) - xc( iprev ) );
+                    dy = sign(dx) * ( yc( inext ) - yc( iprev ) ) / ard * arp;
+                    dx = sign(dx) * dx;
+
+                    % Calculate angle
+                    th = atan2( dy, dx ) * 180.0 / pi;
                 end
-                inext = iprev + 1;
 
-                % Calculate aspect ratio adjusted slope
-                dx = ( xc( inext ) - xc( iprev ) );
-                dy = sign(dx) * ( yc( inext ) - yc( iprev ) ) / ard * arp;
-                dx = sign(dx) * dx;
+                hh = text( xint(iint), yint(iint), num2str( level ), 'rotation', th, 'HorizontalAlignment', 'center', 'VerticalAlignment', 'middle'  );
 
-                % Calculate angle
-                th = atan2( dy, dx ) * 180.0 / pi;
+                % Append text handle
+                h = [h hh];
             end
-
-            hh = text( xint(iint), yint(iint), num2str( level ), 'rotation', th, 'HorizontalAlignment', 'center', 'VerticalAlignment', 'middle'  );
-
-            % Append text handle
-            h = [h hh];
         end
     end
 
